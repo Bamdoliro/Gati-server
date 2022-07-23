@@ -1,5 +1,6 @@
 package com.bamdoliro.gati.domain.chat.domain;
 
+import com.bamdoliro.gati.domain.chat.domain.type.RoomStatus;
 import com.bamdoliro.gati.global.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,6 +25,10 @@ public class Room extends BaseTimeEntity {
     @Column(length = 20, nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10, nullable = false)
+    private RoomStatus status;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
     private List<RoomMember> members = new ArrayList<>();
 
@@ -33,5 +38,14 @@ public class Room extends BaseTimeEntity {
     @Builder
     public Room(String name) {
         this.name = name;
+        this.status = RoomStatus.ACTIVATED;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void endRoom() {
+        this.status = RoomStatus.ENDED;
     }
 }

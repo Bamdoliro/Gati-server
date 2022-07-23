@@ -5,18 +5,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/chat/room/member")
+@RequestMapping("/chat/room/{roomId}/member")
 @RequiredArgsConstructor
 public class RoomMemberController {
 
     private final RoomMemberService roomMemberService;
 
-    @PostMapping("/join/{roomId}")
+    @PostMapping
     public void joinRoom(@PathVariable Long roomId) {
         roomMemberService.joinRoom(roomId);
     }
 
-    @DeleteMapping("/leave/{roomId}")
+    @DeleteMapping
     public void leaveRoom(@PathVariable Long roomId) {
         roomMemberService.leaveRoom(roomId);
     }

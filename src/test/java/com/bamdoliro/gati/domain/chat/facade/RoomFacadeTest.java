@@ -2,6 +2,7 @@ package com.bamdoliro.gati.domain.chat.facade;
 
 import com.bamdoliro.gati.domain.chat.domain.Room;
 import com.bamdoliro.gati.domain.chat.domain.repository.RoomRepository;
+import com.bamdoliro.gati.domain.chat.domain.type.RoomStatus;
 import com.bamdoliro.gati.domain.chat.exception.RoomNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,27 +38,28 @@ class RoomFacadeTest {
     @DisplayName("[Facade] Room id로 찾기")
     void givenRoomId_whenFindingRoom_thenReturnsRoom() {
         // given
-        given(roomRepository.findById(any())).willReturn(Optional.of(defaultRoom));
+        given(roomRepository.findByIdAndStatus(any(), any(RoomStatus.class))).willReturn(Optional.of(defaultRoom));
 
         // when
         Room foundRoom = roomFacade.findRoomById(defaultRoom.getId());
 
         // then
-        verify(roomRepository, times(1)).findById(defaultRoom.getId());
+        verify(roomRepository, times(1)).findByIdAndStatus(defaultRoom.getId(), RoomStatus.ACTIVATED);
         assertEquals(defaultRoom.getName(), foundRoom.getName());
         assertEquals(defaultRoom.getMembers(), foundRoom.getMembers());
         assertEquals(defaultRoom.getMessages(), foundRoom.getMessages());
+        assertEquals(defaultRoom.getStatus(), foundRoom.getStatus());
     }
 
     @Test
     @DisplayName("[Facade] Room id로 찾기 - 없는 경우")
     void givenInvalidRoomId_whenFindingRoom_thenThrowsRoomNotFoundException() {
         // given
-        given(roomRepository.findById(any())).willReturn(Optional.empty());
+        given(roomRepository.findByIdAndStatus(any(), any(RoomStatus.class))).willReturn(Optional.empty());
 
         // when and then
         assertThrows(RoomNotFoundException.class,
                 () -> roomFacade.findRoomById(defaultRoom.getId()));
-        verify(roomRepository, times(1)).findById(defaultRoom.getId());
+        verify(roomRepository, times(1)).findByIdAndStatus(defaultRoom.getId(), RoomStatus.ACTIVATED);
     }
 }
