@@ -1,13 +1,14 @@
 package com.bamdoliro.gati.domain.user.presentation;
 
-import com.bamdoliro.gati.domain.user.presentation.dto.request.*;
-import com.bamdoliro.gati.domain.user.presentation.dto.response.TokenResponseDto;
+import com.bamdoliro.gati.domain.user.presentation.dto.request.CreateUserRequestDto;
+import com.bamdoliro.gati.domain.user.presentation.dto.request.DeleteUserRequestDto;
+import com.bamdoliro.gati.domain.user.presentation.dto.request.UpdateUserNameRequestDto;
+import com.bamdoliro.gati.domain.user.presentation.dto.request.UpdateUserPasswordRequestDto;
 import com.bamdoliro.gati.domain.user.presentation.dto.response.GetUserResponseDto;
 import com.bamdoliro.gati.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -20,19 +21,6 @@ public class UserController {
     @PostMapping("/join")
     public void createUser(@RequestBody @Valid CreateUserRequestDto dto) {
         userService.createUser(dto);
-    }
-
-    @PostMapping("/login")
-    public TokenResponseDto loginUser(
-            @RequestBody @Valid LoginUserRequestDto dto,
-            HttpServletResponse response
-    ) {
-        return userService.loginUser(dto, response);
-    }
-
-    @PostMapping("/logout")
-    public void logoutUser(HttpServletResponse response) {
-        userService.logoutUser(response);
     }
 
     @GetMapping
