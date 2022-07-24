@@ -25,6 +25,11 @@ public class CommunityController {
         return communityService.getPagingCommunity(pageable);
     }
 
+    @GetMapping("/my")
+    public List<CommunityResponseDto> getUserCommunity() {
+        return communityService.getMyCommunity();
+    }
+
     @GetMapping("/{id}")
     public CommunityDetailResponseDto getCommunityDetail(@PathVariable Long id) {
         return communityService.getCommunityDetail(id);

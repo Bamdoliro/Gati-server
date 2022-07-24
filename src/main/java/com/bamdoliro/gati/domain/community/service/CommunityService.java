@@ -1,6 +1,7 @@
 package com.bamdoliro.gati.domain.community.service;
 
 import com.bamdoliro.gati.domain.community.domain.Community;
+import com.bamdoliro.gati.domain.community.domain.Member;
 import com.bamdoliro.gati.domain.community.domain.repository.CommunityRepository;
 import com.bamdoliro.gati.domain.community.domain.type.Authority;
 import com.bamdoliro.gati.domain.community.domain.type.CommunityStatus;
@@ -10,6 +11,7 @@ import com.bamdoliro.gati.domain.community.presentation.dto.request.CreateCommun
 import com.bamdoliro.gati.domain.community.presentation.dto.request.UpdateCommunityRequestDto;
 import com.bamdoliro.gati.domain.community.presentation.dto.response.CommunityDetailResponseDto;
 import com.bamdoliro.gati.domain.community.presentation.dto.response.CommunityResponseDto;
+import com.bamdoliro.gati.domain.user.domain.User;
 import com.bamdoliro.gati.domain.user.facade.UserFacade;
 import com.bamdoliro.gati.global.utils.RandomCodeUtil;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,16 @@ public class CommunityService {
     public Page<CommunityResponseDto> getPagingCommunity(Pageable pageable) {
         return communityRepository.findAll(pageable)
                 .map(CommunityResponseDto::of);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommunityResponseDto> getMyCommunity() {
+        User user = userFacade.getCurrentUser();
+
+        return user.getCommunities().stream()
+                .map(Member::getCommunity)
+                .map(CommunityResponseDto::of)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -101,4 +113,5 @@ public class CommunityService {
 
         community.deleteCommunity();
     }
+
 }
